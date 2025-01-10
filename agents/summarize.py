@@ -1,7 +1,7 @@
 from typing import List, TypedDict
 import streamlit as st
 from utils.llm import generar_resumen_ajustado
-from types import AppState
+from app_state import AppState
 
 def resumir_agente(state: AppState):
     articulos = state["articulos"]

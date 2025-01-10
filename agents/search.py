@@ -2,7 +2,7 @@ from typing import List, TypedDict
 import streamlit as st
 from utils.arxiv import buscar_en_arxiv, procesar_xml_arxiv
 from vector_db.chroma_db import cargar_documentos_en_chroma
-from types import AppState
+from app_state import AppState
 
 
 def buscar_agente(state: AppState):
