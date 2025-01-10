@@ -1,7 +1,7 @@
 from typing import List, TypedDict
 import streamlit as st
 from utils.twitter import publicar_en_twitter_v2
-
+from types import AppState
 
 def publicar_agente(state: AppState):
     mensajes = state.get("mensajes", [])
