@@ -1,30 +1,47 @@
 import streamlit as st
 from langgraph.graph import StateGraph
 from typing import List, TypedDict
-from app_state import AppState
 import time
 from langchain.vectorstores import Chroma
 import tweepy
 from agents.search import buscar_agente
 from utils.twitter import publicar_en_twitter_v2, client
 from agents.summarize import resumir_agente
+from vector_db.chroma_db import embeddings #Importar embeddings
+from app_state import AppState
+import os
+
 
 
 
 # Interfaz de Streamlit
 st.title("ArXiv to X Agent System")
 
-# Inicialización del estado en Streamlit
+# Inicialización del estado en Streamlit (PRIMERO)
 if "app_state" not in st.session_state:
     st.session_state.app_state = AppState(consulta="", articulos=[], resumenes={}, resumenes_aprobados={}, mensajes=[], vector_store=None)
 
-app_state = st.session_state.app_state
+app_state = st.session_state.app_state #Definir app_state
 
-st.session_state.app_state = app_state # Actualizar el estado
+# Inicialización de Chroma (DESPUÉS de inicializar app_state)
+root_dir = os.getcwd()
+persist_directory = os.path.join(root_dir, "chroma_db")
+if os.path.exists(persist_directory) and len(os.listdir(persist_directory)) > 0:
+    try:
+        app_state["vector_store"] = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
+        st.info("ChromaDB cargado desde disco.")
+    except Exception as e:
+        st.error(f"Error al cargar ChromaDB desde disco: {e}")
+        app_state["vector_store"] = None
+else:
+    st.info("No se encontró una base de datos Chroma existente. Se creará una nueva al buscar artículos.")
+    app_state["vector_store"] = None
+
+st.session_state.app_state = app_state # Actualizar el estado en session_state
 
 # Grafo de LangGraph
 graph_builder = StateGraph(AppState)
-graph_builder.add_node("buscar", buscar_agente)
+graph_builder.add_node("buscar", lambda state: buscar_agente(state, root_dir))
 graph_builder.add_node("resumir", resumir_agente)
 #graph_builder.add_node("publicar", publicar_agente) #No se usa directamente
 graph_builder.set_entry_point("buscar")
