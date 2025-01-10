@@ -1,7 +1,7 @@
 import streamlit as st
 from langgraph.graph import StateGraph
 from typing import List, TypedDict
-from types import AppState #Importar AppState desde types.py
+from app_state import AppState
 import time
 from langchain.vectorstores import Chroma
 import tweepy
@@ -9,14 +9,7 @@ from agents.search import buscar_agente
 from utils.twitter import publicar_en_twitter_v2, client
 from agents.summarize import resumir_agente
 
-# Definir el estado del grafo
-class AppState(TypedDict):
-    consulta: str
-    articulos: List[dict]
-    resumenes: dict
-    resumenes_aprobados: dict
-    mensajes: List[dict]
-    vector_store: Chroma
+
 
 # Interfaz de Streamlit
 st.title("ArXiv to X Agent System")
