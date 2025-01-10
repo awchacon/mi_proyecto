@@ -4,7 +4,7 @@ from langchain.schema import Document
 import os
 import streamlit as st
 import gc
-from types import AppState
+from app_state import AppState
 
 embeddings = OllamaEmbeddings(model="llama3.1")
 
