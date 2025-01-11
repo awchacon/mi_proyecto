@@ -1,6 +1,6 @@
 # types.py
 from typing import List, TypedDict
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 
 # Definir el estado del grafo
 class AppState(TypedDict):

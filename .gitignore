@@ -1,2 +1,4 @@
 __pycache__/
 chroma_db/
+script_cargar_chroma.py
+test_buscar_agente.py
