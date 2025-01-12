@@ -39,22 +39,22 @@ Este proyecto demuestra la creación de un prototipo con varios agentes que inte
 ## Estructura del proyecto
 
 MI_PROYECTO/
-├── agents/
-....├── publish.py
-....├── search.py
-....└── summarize.py
-├── chroma_db/
-....└── ...
-├── utils/
-....├── arxiv.py
-....├── llm.py
-....└── twitter.py
-├── vector_db/
-....└── chroma_db.py
-├── .gitignore
-├── app_state.py
-├── app.py
-└── README.md
+*   agents/
+    *   publish.py
+    *   search.py
+    *   summarize.py
+*   chroma_db/
+    *   ...
+*   utils/
+    *   arxiv.py
+    *   llm.py
+    *   twitter.py
+*   vector_db/
+    *   chroma_db.py
+*   .gitignore
+*   app_state.py
+*   app.py
+*   README.md
 
 ## Dependencias
 
