@@ -1,7 +1,7 @@
 from typing import List, TypedDict
 import streamlit as st
 from utils.arxiv import search_in_arxiv, process_xml_arxiv
-from vector_db.chroma_db import load_documents_in_chrome
+from vector_db.chroma_db import load_documents_in_chroma
 from app_state import AppState
 
 
@@ -16,7 +16,7 @@ def search_agent(state: AppState, root_dir: str):
         mensajes.append({"role": "system", "content": f"Se encontraron {len(articulos)} artículos."})
 
         
-        load_documents_in_chrome(articulos, state, root_dir)
+        load_documents_in_chroma(articulos, state, root_dir)
 
         st.session_state.app_state = state  # Actualizar el estado 
     else:

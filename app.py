@@ -34,7 +34,7 @@ if app_state["vector_store"] is None:
     persist_directory = "chroma_db"  # Ruta base de datos Chroma
     try:
         app_state["vector_store"] = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
-        st.info("ChromaDB cargado correctamente.")
+        #st.info("ChromaDB cargado correctamente.")
     except Exception as e:
         st.error(f"Error al cargar ChromaDB: {e}. Asegúrate de que existe la carpeta chroma_db y que contiene datos. Error: {e}")
         app_state["vector_store"] = None

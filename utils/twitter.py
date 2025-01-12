@@ -3,29 +3,25 @@ from dotenv import load_dotenv
 import tweepy
 import streamlit as st
 
-# Carga las variables del archivo .env
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"))
 
-# Accede a las variables de entorno
-TWITTER_API_KEY = os.getenv("TWITTER_API_KEY")
-TWITTER_API_SECRET = os.getenv("TWITTER_API_SECRET")
-TWITTER_ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN")
-TWITTER_ACCESS_TOKEN_SECRET = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-TWITTER_BEARER_TOKEN = os.getenv("TWITTER_BEARER_TOKEN", None)  # Token opcional
+API_KEY  = str(os.getenv("TWITTER_API_KEY") or "") 
+API_SECRET = str(os.getenv("TWITTER_API_SECRET") or "")
+ACCESS_TOKEN = str(os.getenv("TWITTER_ACCESS_TOKEN") or "")
+ACCESS_TOKEN_SECRET = str(os.getenv("TWITTER_ACCESS_TOKEN_SECRET") or "")
+BEARER_TOKEN = str(os.getenv("TWITTER_BEARER_TOKEN") or "")
 
 try:
-  if TWITTER_BEARER_TOKEN:
-    client = tweepy.Client(bearer_token=TWITTER_BEARER_TOKEN)
-  else:
     client = tweepy.Client(
-        consumer_key=TWITTER_API_KEY,
-        consumer_secret=TWITTER_API_SECRET,
-        access_token=TWITTER_ACCESS_TOKEN,
-        access_token_secret=TWITTER_ACCESS_TOKEN_SECRET
+        bearer_token=BEARER_TOKEN,
+        consumer_key=API_KEY,
+        consumer_secret=API_SECRET,
+        access_token=ACCESS_TOKEN,
+        access_token_secret=ACCESS_TOKEN_SECRET
     )
 except tweepy.errors.Unauthorized:
-  st.error("Error de autenticación en Twitter. Verifica tus credenciales.")
-  client = None 
+    st.error("Error de autenticación en Twitter. Verifica tus credenciales.")
+    client = None # Para evitar errores posteriores
 
 
 def publish_on_twitter_v2(texto):

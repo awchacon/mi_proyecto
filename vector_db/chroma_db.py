@@ -5,7 +5,7 @@ import os
 
 embeddings = OllamaEmbeddings(model="llama3.1")
 
-def load_documents_in_chrome(articulos, state, root_dir):
+def load_documents_in_chroma(articulos, state, root_dir):
     persist_directory = os.path.join(root_dir, "chroma_db")
     if state["vector_store"] is None:
         state["vector_store"] = Chroma.from_documents(client=None, documents=[], embedding_function=embeddings.embed_query, persist_directory=persist_directory)
