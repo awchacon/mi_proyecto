@@ -1,4 +1,4 @@
-# # Buscador de Artículos Científicos con Chat basado en LLM (ArXiv & X Agents)
+# Buscador de Artículos Científicos con Chat basado en LLM (ArXiv & X Agents)
 
 Este proyecto implementa un sistema para buscar artículos científicos en ArXiv, generar resúmenes, publicarlos en X (anteriormente Twitter) y chatear con un LLM sobre el contenido de esos artículos. Se utiliza LangChain para la gestión de LLMs y cadenas, ChromaDB para el almacenamiento de embeddings y Ollama como LLM.
 
