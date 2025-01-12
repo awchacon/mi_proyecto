@@ -13,6 +13,7 @@ Este proyecto demuestra la creación de un prototipo con varios agentes que inte
 *   Cuenta de desarrollador en X (Twitter) con las credenciales configuradas.
 *   Instancia de Ollama corriendo con el modelo `llama3.1` disponible.
 
+## Instalación
 
 1.  Instala las dependencias:
 
