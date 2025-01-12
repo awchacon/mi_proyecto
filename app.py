@@ -13,12 +13,19 @@ import os
 from langchain.chains import RetrievalQA
 from langchain.embeddings import OllamaEmbeddings
 from langchain.llms import Ollama
+import cohere
 
+from langchain.embeddings import SentenceTransformerEmbeddings # Importar embeddings de SentenceTransformer
+
+
+
+# Inicialización de embeddings PARA CHROMA (SentenceTransformer)
+chroma_embeddings = SentenceTransformerEmbeddings(model_name="all-mpnet-base-v2") #Embeddings para chroma
 
 # Inicialización del modelo de Ollama y embeddings
 try:
-    llm = Ollama(model="llama3.1", temperature=0.1)
-    embeddings = OllamaEmbeddings(model="llama3.1")
+    ollama_llm = Ollama(model="llama3.1", temperature=0.1)
+    ollama_embeddings = OllamaEmbeddings(model="llama3.1")
 except Exception as e:
     st.error(f"Error al inicializar Ollama: {e}")
     st.stop()
@@ -42,6 +49,12 @@ if app_state["vector_store"] is None:
 st.session_state.app_state = app_state
 
 
+# Inicializar el cliente de Cohere (FUERA de cualquier función para que solo se inicialice una vez)
+try:
+    co = cohere.Client(os.getenv("COHERE_API_KEY")) # Usando variable de entorno para la api key
+except Exception as e:
+    st.error(f"Error al inicializar Cohere: {e}. Asegúrate de que la clave de API de Cohere sea correcta y esté configurada en las variables de entorno.")
+    co = None
 
 # Interfaz de Streamlit
 tab1, tab2 = st.tabs(["Búsqueda y Publicación", "Chat con ChromaDB"])
@@ -167,12 +180,15 @@ with tab2:
 
     if st.button("Enviar"):
         if user_question:
-            if app_state["vector_store"]: #Comprobar si chromadb se ha inicializado
+            if app_state["vector_store"]:
                 try:
-                    qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=app_state["vector_store"].as_retriever())
                     with st.spinner("Pensando..."):
+                        retriever = app_state["vector_store"].as_retriever(search_kwargs={"k": 3})
+                        qa = RetrievalQA.from_chain_type(llm=ollama_llm, chain_type="stuff", retriever=retriever)
                         result = qa({"query": user_question})
+
                     st.write("Respuesta:", result["result"])
+                    st.session_state.app_state = app_state #Actualizar el estado
                 except Exception as e:
                     st.error(f"Error al procesar la pregunta: {e}")
             else:
