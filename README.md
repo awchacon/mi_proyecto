@@ -58,18 +58,23 @@ MI_PROYECTO/
 
 ## Dependencias
 
+Este proyecto utiliza las siguientes bibliotecas:
+
 *   `langchain`
 *   `langchain-community`
 *   `langchain-ollama`
 *   `streamlit`
 *   `arxiv`
-*   `tweepy`
-*   Otras dependencias (ver `requirements.txt`)
+*   `sentence-transformers`
+*   `cohere` 
+Otras dependencias (ver `requirements.txt`)
+
+## Modelos de Ollama
+
+Ollama [model="llama3.1"]
 
 ## Próximas mejoras
 
-*   Implementación de reranking con Cohere.
 *   Mejoras en la interfaz de usuario.
 *   Manejo de errores más robusto.
-*   Implementación de un sistema de feedback más sofisticado.
 *   Soporte para otras plataformas además de X (Twitter).
