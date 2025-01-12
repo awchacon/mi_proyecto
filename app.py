@@ -57,7 +57,7 @@ except Exception as e:
     co = None
 
 # Interfaz de Streamlit
-tab1, tab2 = st.tabs(["Búsqueda y Publicación", "Chat con ChromaDB"])
+tab1, tab2 = st.tabs(["Búsqueda y Publicación", "Chat"])
 
 # Pestaña 1: Búsqueda y Publicación
 with tab1:
