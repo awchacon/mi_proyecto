@@ -1,4 +1,3 @@
-# types.py
 from typing import List, TypedDict
 from langchain_community.vectorstores import Chroma
 

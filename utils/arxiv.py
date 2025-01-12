@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 import streamlit as st
 
 # Función para buscar en la API de ArXiv
-def buscar_en_arxiv(consulta, max_results=2):
+def search_in_arxiv(consulta, max_results=2):
     params = {"search_query": f"all:{consulta}", "start": 0, "max_results": max_results}
     response = requests.get("http://export.arxiv.org/api/query", params=params)
     if response.status_code == 200:
@@ -13,7 +13,7 @@ def buscar_en_arxiv(consulta, max_results=2):
         return None
     
 # Función para procesar datos de ArXiv
-def procesar_xml_arxiv(xml_string):
+def process_xml_arxiv(xml_string):
     namespace = {"atom": "http://www.w3.org/2005/Atom", "arxiv": "http://arxiv.org/schemas/atom"}
     root = ET.fromstring(xml_string)
     articulos = []

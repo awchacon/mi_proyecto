@@ -1,24 +1,24 @@
 from typing import List, TypedDict
 import streamlit as st
-from utils.arxiv import buscar_en_arxiv, procesar_xml_arxiv
-from vector_db.chroma_db import cargar_documentos_en_chroma
+from utils.arxiv import search_in_arxiv, process_xml_arxiv
+from vector_db.chroma_db import load_documents_in_chrome
 from app_state import AppState
 
 
-def buscar_agente(state: AppState, root_dir: str):
+def search_agent(state: AppState, root_dir: str):
     consulta = state["consulta"]
-    xml_data = buscar_en_arxiv(consulta)
+    xml_data = search_in_arxiv(consulta)
     mensajes = state.get("mensajes", [])
 
     if xml_data:
-        articulos = procesar_xml_arxiv(xml_data)
+        articulos = process_xml_arxiv(xml_data)
         state["articulos"] = articulos
         mensajes.append({"role": "system", "content": f"Se encontraron {len(articulos)} artículos."})
 
-        # ***CORRECCIÓN CRUCIAL: LLAMAR A LA FUNCIÓN AQUÍ***
-        cargar_documentos_en_chroma(articulos, state, root_dir)
+        
+        load_documents_in_chrome(articulos, state, root_dir)
 
-        st.session_state.app_state = state  # Actualizar el estado (esto puede ir al final de la función)
+        st.session_state.app_state = state  # Actualizar el estado 
     else:
         mensajes.append({"role": "system", "content": "No se encontraron artículos en ArXiv."})
         state["articulos"] = []

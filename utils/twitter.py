@@ -18,15 +18,14 @@ try:
     )
 except tweepy.errors.Unauthorized:
     st.error("Error de autenticación en Twitter. Verifica tus credenciales.")
-    client = None # Para evitar errores posteriores
+    client = None 
 
 
-def publicar_en_twitter_v2(texto):
+def publish_on_twitter_v2(texto):
     try:
         if len(texto) > 280:
-            texto = texto[:277] + "..."  # Trunca el texto si es demasiado largo
+            texto = texto[:277] + "..." 
 
-        # Publicar el tweet
         response = client.create_tweet(text=texto)
         tweet_id = response.data["id"]
         return f"¡Publicado en X con éxito! [Ver Tweet](https://twitter.com/user/status/{tweet_id})"

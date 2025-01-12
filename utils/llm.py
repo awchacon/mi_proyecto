@@ -3,12 +3,11 @@ from langchain.prompts import PromptTemplate
 
 
 # Función para generar resúmenes con Ollama
-def generar_resumen_ajustado(articulo):
+def generate_summary_adjusted(articulo):
     try:
         if not all(k in articulo for k in ['titulo', 'resumen', 'enlace']):
             return "Error: El artículo no contiene toda la información requerida."
 
-        # Inicializar el modelo de Ollama (CORREGIDO)
         llm = Ollama(model="llama3.1", temperature=0.7)
         prompt_template = PromptTemplate(
         input_variables=["resumen"],
@@ -16,9 +15,6 @@ def generar_resumen_ajustado(articulo):
         )
         prompt = prompt_template.format(resumen=articulo['resumen'])
         response = llm.invoke(prompt)
-
-        # Invocar al LLM con .invoke (CORREGIDO)
-        response = llm.invoke(prompt) # Usar invoke en lugar de _call o llm(prompt)
 
         if not response:
             return "Error: El resumen generado está vacío."

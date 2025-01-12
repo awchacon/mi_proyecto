@@ -4,10 +4,10 @@ from typing import List, TypedDict
 import time
 from langchain.vectorstores import Chroma
 import tweepy
-from agents.search import buscar_agente
-from utils.twitter import publicar_en_twitter_v2, client
-from agents.summarize import resumir_agente
-from vector_db.chroma_db import embeddings #Importar embeddings
+from agents.search import search_agent
+from utils.twitter import publish_on_twitter_v2, client
+from agents.summarize import summarize_agent
+from vector_db.chroma_db import embeddings 
 from app_state import AppState
 import os
 from langchain.chains import RetrievalQA
@@ -15,7 +15,7 @@ from langchain.embeddings import OllamaEmbeddings
 from langchain.llms import Ollama
 
 
-# Inicialización del modelo de Ollama y embeddings (FUERA DE CUALQUIER FUNCIÓN)
+# Inicialización del modelo de Ollama y embeddings
 try:
     llm = Ollama(model="llama3.1", temperature=0.1)
     embeddings = OllamaEmbeddings(model="llama3.1")
@@ -23,36 +23,35 @@ except Exception as e:
     st.error(f"Error al inicializar Ollama: {e}")
     st.stop()
 
-# Inicialización del estado de Streamlit (AL INICIO DEL SCRIPT)
+# Inicialización del estado de Streamlit
 if "app_state" not in st.session_state:
     st.session_state.app_state = AppState(consulta="", articulos=[], resumenes={}, resumenes_aprobados={}, mensajes=[], vector_store=None)
 
 app_state = st.session_state.app_state
 
-# Inicialización de Chroma (FUERA DE LAS PESTAÑAS Y DENTRO DE UN IF)
+# Inicialización de Chroma 
 if app_state["vector_store"] is None:
-    persist_directory = "chroma_db"  # Ruta a tu base de datos Chroma
+    persist_directory = "chroma_db"  # Ruta base de datos Chroma
     try:
         app_state["vector_store"] = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
         st.info("ChromaDB cargado correctamente.")
     except Exception as e:
         st.error(f"Error al cargar ChromaDB: {e}. Asegúrate de que existe la carpeta chroma_db y que contiene datos. Error: {e}")
         app_state["vector_store"] = None
-        st.stop() #Detener la ejecucion si hay un error en la carga de chromadb
+        st.stop() #Detener la ejecucion si hay error de carga de chromadb
 st.session_state.app_state = app_state
 
 
-# PESTAÑAS
+
+# Interfaz de Streamlit
 tab1, tab2 = st.tabs(["Búsqueda y Publicación", "Chat con ChromaDB"])
 
-
-
-# Pestaña 1: Búsqueda y Publicación (Código que ya tenías, con las correcciones anteriores)
+# Pestaña 1: Búsqueda y Publicación
 with tab1:
-        # Interfaz de Streamlit
+
     st.title("ArXiv to X Agent System")
 
-    # Inicialización de Chroma (DESPUÉS de inicializar app_state)
+    # Inicialización de Chroma
     root_dir = os.getcwd()
     persist_directory = os.path.join(root_dir, "chroma_db")
     if os.path.exists(persist_directory) and len(os.listdir(persist_directory)) > 0:
@@ -66,19 +65,17 @@ with tab1:
         st.info("No se encontró una base de datos Chroma existente. Se creará una nueva al buscar artículos.")
         app_state["vector_store"] = None
 
-    st.session_state.app_state = app_state # Actualizar el estado en session_state
+    st.session_state.app_state = app_state # Actualizar el estado
 
     # Grafo de LangGraph
     graph_builder = StateGraph(AppState)
-    graph_builder.add_node("buscar", lambda state: buscar_agente(state, root_dir))
-    graph_builder.add_node("resumir", resumir_agente)
-    #graph_builder.add_node("publicar", publicar_agente) #No se usa directamente
+    graph_builder.add_node("buscar", lambda state: search_agent(state, root_dir))
+    graph_builder.add_node("resumir", summarize_agent)
     graph_builder.set_entry_point("buscar")
     graph_builder.add_edge("buscar", "resumir")
-    #graph_builder.add_edge("resumir", "publicar") #No se usa directamente
     graph = graph_builder.compile()
 
-    # Interacción con el usuario en Streamlit
+    # Interacción con usuario en Streamlit
     consulta = st.text_input("Introduce tu consulta en ArXiv:")
 
     if st.button("Buscar en ArXiv"):
@@ -121,7 +118,7 @@ with tab1:
                     with st.spinner("Publicando en X..."):
                         try:
                             resumen_str = str(resumen)
-                            resultado = publicar_en_twitter_v2(resumen_str)
+                            resultado = publish_on_twitter_v2(resumen_str)
                             st.session_state.app_state = app_state
                             if "Publicado en X con éxito" in resultado:
                                 st.success(resultado)
@@ -163,9 +160,9 @@ with tab1:
     for mensaje in app_state["mensajes"]:
         st.write(f"- {mensaje['content']}")
 
-# Pestaña 2: Chat con ChromaDB
+#Pestaña 2: Chat 
 with tab2:
-    st.title("Chat con ChromaDB")
+    st.title("Chat")
     user_question = st.text_input("Pregunta:")
 
     if st.button("Enviar"):
