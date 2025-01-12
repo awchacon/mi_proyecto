@@ -39,22 +39,22 @@ Este proyecto demuestra la creación de un prototipo con varios agentes que inte
 ## Estructura del proyecto
 
 MI_PROYECTO/
-*   agents/
-    *   publish.py
-    *   search.py
-    *   summarize.py
-*   chroma_db/
-    *   ...
-*   utils/
-    *   arxiv.py
-    *   llm.py
-    *   twitter.py
-*   vector_db/
-    *   chroma_db.py
-*   .gitignore
-*   app_state.py
-*   app.py
-*   README.md
+*   agents/             # Contiene la lógica de los agentes
+    *   publish.py      # Agente para publicar en X (Twitter)
+    *   search.py       # Agente para buscar en ArXiv
+    *   summarize.py    # Agente para resumir artículos
+*   chroma_db/         # Base de datos de ChromaDB
+    *   ...             # Contenido de la base de datos (se omite para brevedad)
+*   utils/              # Funciones utilitarias
+    *   arxiv.py        # Interacción con la API de ArXiv
+    *   llm.py          # Interacción con el LLM (Ollama)
+    *   twitter.py      # Interacción con la API de X (Twitter)
+*   vector_db/          # Código para interactuar con la base de datos vectorial
+    *   chroma_db.py    # Inicialización y consultas a ChromaDB
+*   .gitignore          # Archivos ignorados por Git
+*   app_state.py        # Definición de la clase AppState para el manejo del estado
+*   app.py              # Archivo principal de la aplicación Streamlit
+*   README.md           # Este archivo
 
 ## Dependencias
 
