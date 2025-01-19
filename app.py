@@ -88,6 +88,12 @@ with tab1:
     graph_builder.add_edge("buscar", "resumir")
     graph = graph_builder.compile()
 
+    if st.checkbox("Mostrar visualización del grafo"):
+        image_data = graph.get_graph().draw_mermaid_png()
+        with open("graph_visualization.png", "wb") as f:
+            f.write(image_data)
+        st.image("graph_visualization.png")
+
     # Interacción con usuario en Streamlit
     consulta = st.text_input("Introduce tu consulta en ArXiv:")
 
