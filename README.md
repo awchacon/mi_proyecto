@@ -79,3 +79,7 @@ Ollama [model="llama3.1"]
 *   Mejoras en la interfaz de usuario.
 *   Manejo de errores más robusto.
 *   Soporte para otras plataformas además de X (Twitter).
+
+![Búsqueda y publicación](imagenes/img_grafo.jpg)
+
+![Chat con LLM](imagenes/img_chat.jpg)
