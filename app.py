@@ -84,8 +84,10 @@ with tab1:
     graph_builder = StateGraph(AppState)
     graph_builder.add_node("buscar", lambda state: search_agent(state, root_dir))
     graph_builder.add_node("resumir", summarize_agent)
+    graph_builder.add_node("END", lambda state: state)
     graph_builder.set_entry_point("buscar")
     graph_builder.add_edge("buscar", "resumir")
+    graph_builder.add_edge("resumir", "END")
     graph = graph_builder.compile()
 
     if st.checkbox("Mostrar visualización del grafo"):
